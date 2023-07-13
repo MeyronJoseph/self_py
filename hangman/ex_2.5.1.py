@@ -16,3 +16,4 @@ Welcome to the game Hangman
 MAX_TRIES = 6
 
 print(HANGMAN_ASCII_ART, MAX_TRIES)
+
