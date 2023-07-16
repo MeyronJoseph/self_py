@@ -16,19 +16,14 @@ def is_valid_input(letter_guessed):
         return True
 
 
-# def main():
-#     is is_valid_input("bla)
-#
-#
-# if __name__ == "__main__":
-#     main()
+
 
 #################################
 # Course solution:
 
 # def is_valid_input(letter_guessed):
 #     """Checks the validation of input (character)
-#     :param: letter_guessed: userâ€™s guess
+#     :param: letter_guessed: user guess
 #     :type: string
 #     :return: Whether or not the input was valid
 #     :rtype: boolean
