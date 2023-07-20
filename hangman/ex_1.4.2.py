@@ -58,10 +58,13 @@ x-------x
 |      / \\
 |
 """
-print(picture_1,
-      picture_2,
-      picture_3,
-      picture_4,
-      picture_5,
-      picture_6,
-      picture_7)
+
+
+if __name__ == "__main__":
+    print(picture_1,
+          picture_2,
+          picture_3,
+          picture_4,
+          picture_5,
+          picture_6,
+          picture_7)
