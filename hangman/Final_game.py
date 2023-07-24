@@ -1,74 +1,81 @@
-#
-
-
-picture_1 = """
+def hangman_pictures(num_of_tries):
+    """
+    Contains all the hangman pictures as variables,
+    and then saves them as a dictionary.
+    :param num_of_tries: user number of tries in the game
+    :type num_of_tries: int
+    :return: The current picture of the hangman according to the number of tries.
+    :rtype: string
+    """
+    picture_1 = """
     x-------x
-"""
+    """
 
-picture_2 = """
+    picture_2 = """
     x-------x
     |
     |
     |
     |
     |
-"""
+    """
 
-picture_3 = """
-    x-------x
-    |       |
-    |       0
-    |
-    |
-    |
-"""
-
-picture_4 = """
+    picture_3 = """
     x-------x
     |       |
     |       0
+    |
+    |
+    |
+    """
+
+    picture_4 = """
+    x-------x
+    |       |
+    |       0
     |       |
     |
     |
-"""
+    """
 
-picture_5 = """
+    picture_5 = """
     x-------x
     |       |
     |       0
     |      /|\\
     |
     |
-"""
+    """
 
-picture_6 = """
+    picture_6 = """
     x-------x
     |       |
     |       0
     |      /|\\
     |      /
     |
-"""
+    """
 
-picture_7 = """
+    picture_7 = """
     x-------x
     |       |
     |       0
     |      /|\\
     |      / \\
     |
-"""
+    """
+    HANGMAN_PHOTOS = {0: picture_1, 1: picture_2, 2: picture_3,
+                      3: picture_4, 4: picture_5, 5: picture_6,
+                      6: picture_7}
 
-
-HANGMAN_PHOTOS = {0: picture_1, 1: picture_2, 2: picture_3,
-                  3: picture_4, 4: picture_5, 5: picture_6,
-                  6: picture_7}
+    return HANGMAN_PHOTOS[num_of_tries]
 
 
 def hangman_opening():
     """
-
-    :return:
+    Prints the game opening and the number of tries (always 6).
+    :return: None
+    :rtype: None
     """
     HANGMAN_ASCII_ART = """
     Welcome to the game Hangman
@@ -95,7 +102,7 @@ def print_hangman(num_of_tries):
     :return: the picture of the hangman in this try
     :rtype: str
     """
-    current_hangman = HANGMAN_PHOTOS[num_of_tries]
+    current_hangman = hangman_pictures(num_of_tries)
     print(current_hangman)
 
 
@@ -124,15 +131,17 @@ def show_hidden_word(secret_word, old_letters_guessed):
 
 def choose_word(file_path, index):
     """
-
-    :param file_path:
-    :param index:
-    :return:
+    Choose 1 word from the words list
+    :param file_path: the user input for his file
+    :param index: word index the user choose
+    :type file_path: string
+    :type index: int
+    :return: the chosen word from the words list
+    :rtype: string
     """
     with open(file_path) as file:
         open_word_file = file.read()
     word_list = open_word_file.split()
-    word_list_len = len(set(word_list))
     chosen_word = word_list[(index - 1) % len(word_list)]
 
     return chosen_word
@@ -193,36 +202,38 @@ def check_win(secret_word, old_letters_guessed):
             return False
     return True
 
-num_of_tries = 0
-def checking(secret_word, letter_guess, old_letters_guessed):
-    """
 
-    :param secret_word:
-    :param letter_guess:
-    :return:
+def checking_cases(secret_word, letter_guess, old_letters_guessed, num_of_tries):
     """
-    global num_of_tries
-    if num_of_tries == 6:
-        print("LOSE")
-        exit()
+    The function divides between 2 cases.
+    Improper input and correct input from the setting side but not found in the secret word.
+    If char not valid, prints X.
+    If char valid but not in secret word, prints ":(", the current hangman picture and return True.
+    :param secret_word: the word to guess
+    :param letter_guess: the user char input
+    :param old_letters_guessed: the list of already guessed letters
+    :param num_of_tries: the tries the user tried
+    :type secret_word: string
+    :type letter_guess: str
+    :type old_letters_guessed: list
+    :type num_of_tries: int
+    :return: True / None
+    :rtype: boolean
+    """
     if try_update_letter_guessed(letter_guess, old_letters_guessed):
         if letter_guess not in secret_word:
             print(":(")
             num_of_tries += 1
             print_hangman(num_of_tries)
-            if num_of_tries == 6:
-                print("LOSE")
-                exit()
             print(show_hidden_word(secret_word, old_letters_guessed))
+            return True
+
         elif letter_guess in secret_word:
             print(show_hidden_word(secret_word, old_letters_guessed))
 
 
 def main():
-    """
 
-    :return:
-    """
     hangman_opening()
 
     user_file_path = input("Please type a file path: ")
@@ -231,18 +242,21 @@ def main():
     secret_word = choose_word(user_file_path, user_word_index)
     old_letters_guessed = []
     user_state = check_win(secret_word, old_letters_guessed)
+    num_of_tries = 0
 
     print_hangman(num_of_tries)
+
     print(show_hidden_word(secret_word, old_letters_guessed))
 
     while user_state is False:
         letter_guess = input("Guess a letter: ")
 
-        checking(secret_word, letter_guess, old_letters_guessed)
+        if checking_cases(secret_word, letter_guess, old_letters_guessed, num_of_tries):
+            num_of_tries += 1
 
-        # if num_of_tries == 6:
-        #     print("LOSE")
-        #     user_state = True
+        if num_of_tries == 6:
+            print("LOSE")
+            user_state = True
         if check_win(secret_word, old_letters_guessed):
             print("WIN")
             user_state = True
